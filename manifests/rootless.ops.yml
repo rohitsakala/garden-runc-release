@@ -3,5 +3,9 @@
   value: true
 
 - type: replace
+  path: /instance_groups/0/jobs/name=containerd/properties?/garden?/experimental_rootless_mode?
+  value: true
+
+- type: replace
   path: /instance_groups/0/jobs/name=garden/properties/grootfs?/skip_mount?
   value: true

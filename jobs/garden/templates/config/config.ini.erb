@@ -1,6 +1,6 @@
 <%
     graph_path       = "/var/vcap/data/garden/graph"
-    runtime_bin_dir  = "/var/vcap/data/garden/bin"
+    runtime_bin_dir  = "/var/vcap/data/containerd/bin"
     rootless         = p("garden.experimental_rootless_mode")
     groot_config_dir = rootless ? "/var/vcap/data/garden/config" : "/var/vcap/jobs/garden/config"
 
@@ -176,7 +176,7 @@
 
 <% if p("garden.experimental_containerd_mode") -%>
 ; containerd
-  containerd-socket = /var/vcap/sys/run/containerd/containerd.sock
+  containerd-socket = /var/vcap/data/containerd/sockets/containerd.sock
   <% if p("garden.experimental_use_containerd_mode_for_processes") -%>
   use-containerd-for-processes = true
   <% end -%>

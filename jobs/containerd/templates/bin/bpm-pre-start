@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+
+
+mkdir -p /var/vcap/data/containerd/sockets
+mkdir -p /var/vcap/data/containerd/runc
+mkdir -p /var/vcap/data/garden/depot
+mkdir -p /var/vcap/data/containerd/bin
+mkdir -p /var/vcap/data/containerd/runc/user

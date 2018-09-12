@@ -1,5 +1,17 @@
+<% if p("bpm.enabled") %>
+
+check process containerd
+  with pidfile /var/vcap/sys/run/bpm/containerd/containerd.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start containerd"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop containerd"
+  group vcap
+
+<% else %>
+
 check process containerd
   with pidfile /var/vcap/sys/run/containerd/containerd.pid
   start program "/var/vcap/jobs/containerd/bin/start"
   stop program "/var/vcap/jobs/containerd/bin/stop"
   group vcap
+
+<% end %>

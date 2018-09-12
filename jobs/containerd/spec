@@ -2,11 +2,22 @@
 name: containerd
 
 templates:
-  config/containerd.toml: config/containerd.toml
-  bin/start: bin/start
+  config/containerd.toml.erb: config/containerd.toml
+  config/bpm.yml: config/bpm.yml
+  bin/start.erb: bin/start
+  bin/bpm-pre-start: bin/bpm-pre-start
   bin/stop: bin/stop
   bin/envs: bin/envs
 
 packages:
 - containerd
 - runc
+
+properties:
+  bpm.enabled:
+    description: "Use bpm. NOTE: this requires a recreate when enabling for the first time, otherwise old containers may be left running"
+    default: false
+
+  garden.experimental_rootless_mode:
+    description: A boolean stating whether or not to run containerd as a non-root user
+    default: false
