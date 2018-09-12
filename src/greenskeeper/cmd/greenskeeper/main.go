@@ -10,8 +10,13 @@ import (
 )
 
 func main() {
-	var rootlessMode bool
+	var (
+		rootlessMode   bool
+		containerdMode bool
+	)
+
 	flag.BoolVar(&rootlessMode, "rootless", false, "run rootless setup")
+	flag.BoolVar(&containerdMode, "containerd", false, "run containerd setup")
 
 	flag.Parse()
 
@@ -26,19 +31,38 @@ func main() {
 		os.Exit(1)
 	}
 
-	directories := []greenskeeper.Directory{
-		greenskeeper.NewDirectoryBuilder(mustGetenv("RUN_DIR")).Mode(0770).Build(),
-		greenskeeper.NewDirectoryBuilder(mustGetenv("GARDEN_DATA_DIR")).Mode(0770).UID(mustResolveUID("vcap")).GID(mustGetMaximus()).Build(),
-		greenskeeper.NewDirectoryBuilder(mustGetenv("LOG_DIR")).Mode(0770).UID(owner).GID(owner).Build(),
-		greenskeeper.NewDirectoryBuilder(mustGetenv("TMPDIR")).Mode(0755).UID(owner).GID(owner).Build(),
-		greenskeeper.NewDirectoryBuilder(mustGetenv("DEPOT_PATH")).Mode(0755).UID(owner).GID(owner).Build(),
-		greenskeeper.NewDirectoryBuilder(mustGetenv("RUNTIME_BIN_DIR")).Mode(0750).GID(mustGetMaximus()).Build(),
-		greenskeeper.NewDirectoryBuilder(mustGetenv("GRAPH_PATH")).Mode(0700).UID(mustGetMaximus()).GID(mustGetMaximus()).Build(),
-	}
+	// TODO: they can all use the same var names as this will be called in separate jobs with their own vars loaded
+	// I just did it this way for the spike for debugging easiness
+	var directories []greenskeeper.Directory
+	if containerdMode {
+		directories = []greenskeeper.Directory{
+			greenskeeper.NewDirectoryBuilder(mustGetenv("CONTAINERD_RUN_DIR")).Mode(0770).Build(),
+			greenskeeper.NewDirectoryBuilder(mustGetenv("CONTAINERD_DATA_DIR")).Mode(0770).UID(mustResolveUID("vcap")).GID(mustGetMaximus()).Build(),
+			greenskeeper.NewDirectoryBuilder(mustGetenv("INIT_BIN_DIR")).Mode(0750).GID(mustGetMaximus()).Build(),
+			greenskeeper.NewDirectoryBuilder(mustGetenv("CONTAINERD_LOG_DIR")).Mode(0770).UID(owner).GID(owner).Build(),
+			greenskeeper.NewDirectoryBuilder(mustGetenv("CONTAINERD_ROOT_DIR")).Mode(0770).UID(owner).GID(owner).Build(),
+			greenskeeper.NewDirectoryBuilder(mustGetenv("CONTAINERD_SOCKETS_DIR")).Mode(0770).UID(owner).GID(owner).Build(),
+			greenskeeper.NewDirectoryBuilder(mustGetenv("CONTAINERD_TMP_DIR")).Mode(0700).UID(owner).GID(owner).Build(),
+		}
+		if rootlessMode {
+			directories = append(directories, greenskeeper.NewDirectoryBuilder(mustGetenv("XDG_RUNTIME_DIR")).Mode(0700).UID(owner).GID(owner).Build())
+			directories = append(directories, greenskeeper.NewDirectoryBuilder(mustGetenv("CONTAINERD_ROOTLESS_CONFIG_DIR")).Mode(0700).UID(owner).GID(owner).Build())
+		}
+	} else {
+		directories = []greenskeeper.Directory{
+			greenskeeper.NewDirectoryBuilder(mustGetenv("RUN_DIR")).Mode(0770).Build(),
+			greenskeeper.NewDirectoryBuilder(mustGetenv("GARDEN_DATA_DIR")).Mode(0770).UID(mustResolveUID("vcap")).GID(mustGetMaximus()).Build(),
+			greenskeeper.NewDirectoryBuilder(mustGetenv("LOG_DIR")).Mode(0770).UID(owner).GID(owner).Build(),
+			greenskeeper.NewDirectoryBuilder(mustGetenv("TMPDIR")).Mode(0755).UID(owner).GID(owner).Build(),
+			greenskeeper.NewDirectoryBuilder(mustGetenv("DEPOT_PATH")).Mode(0755).UID(owner).GID(owner).Build(),
+			greenskeeper.NewDirectoryBuilder(mustGetenv("RUNTIME_BIN_DIR")).Mode(0750).GID(mustGetMaximus()).Build(),
+			greenskeeper.NewDirectoryBuilder(mustGetenv("GRAPH_PATH")).Mode(0700).UID(mustGetMaximus()).GID(mustGetMaximus()).Build(),
+		}
 
-	if rootlessMode {
-		directories = append(directories, greenskeeper.NewDirectoryBuilder(mustGetenv("XDG_RUNTIME_DIR")).Mode(0700).UID(owner).GID(owner).Build())
-		directories = append(directories, greenskeeper.NewDirectoryBuilder(mustGetenv("GARDEN_ROOTLESS_CONFIG_DIR")).Mode(0700).UID(owner).GID(owner).Build())
+		if rootlessMode {
+			directories = append(directories, greenskeeper.NewDirectoryBuilder(mustGetenv("XDG_RUNTIME_DIR")).Mode(0700).UID(owner).GID(owner).Build())
+			directories = append(directories, greenskeeper.NewDirectoryBuilder(mustGetenv("GARDEN_ROOTLESS_CONFIG_DIR")).Mode(0700).UID(owner).GID(owner).Build())
+		}
 	}
 
 	if err := greenskeeper.CreateDirectories(directories...); err != nil {

@@ -14,6 +14,21 @@ processes:
       - path: /var/vcap/data/grootfs/store
         writable: true
         mount_only: true
+<%- if p("garden.experimental_containerd_mode") -%>
+      - path: /var/vcap/data/containerd/runc/user
+        writable: true
+        mount_only: true
+      - path: /var/vcap/data/containerd/sockets
+        writable: true
+        mount_only: true
+      - path: /var/vcap/data/containerd/bin
+        writable: true
+        mount_only: true
+        allow_executions: true
+      - path: /var/vcap/data/garden/depot
+        writable: true
+        mount_only: true
+<%- end -%>
 <%- if_p('garden.additional_bpm_volumes') { |vols| vols.each { |vol| -%>
       - path: <%= vol %>
         mount_only: true

@@ -6,6 +6,7 @@ source /var/vcap/jobs/garden/bin/envs
 source /var/vcap/packages/greenskeeper/bin/system-preparation
 
 permit_device_control
+create_loop_devices 256
 
 log "running thresholder"
 /var/vcap/packages/thresholder/bin/thresholder "<%= p("garden.graph_cleanup_threshold_in_mb") %>" "<%= p("grootfs.graph_cleanup_threshold_in_mb") %>" "<%= p("grootfs.reserved_space_for_other_jobs_in_mb") %>" "$DATA_DIR" "$GARDEN_CONFIG_DIR/grootfs_config.yml"
@@ -27,4 +28,16 @@ if ! grep -q " /var/vcap/data/rep/shared_data "  /proc/self/mountinfo; then
 fi
 <%- end } -%>
 
+
+mkdir -p /var/vcap/data/containerd/bin
+mkdir -p /var/vcap/data/garden/depot
+mkdir -p /var/vcap/data/containerd/sockets
 mkdir -p /var/vcap/data/grootfs/store
+mkdir -p /var/vcap/data/containerd/runc/user
+
+<% if !p("garden.deprecated_use_garden_shed") && p("garden.image_plugin", "") == "" %>
+log "configuring xfs"
+${BASE_PATH}/overlay-xfs-setup
+log "configuring xfs: done"
+<% end %>
+

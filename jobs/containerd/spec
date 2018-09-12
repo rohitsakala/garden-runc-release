@@ -2,11 +2,16 @@
 name: containerd
 
 templates:
-  config/containerd.toml: config/containerd.toml
-  bin/start: bin/start
+  config/containerd.toml.erb: config/containerd.toml
+  bin/start.erb: bin/start
   bin/stop: bin/stop
   bin/envs: bin/envs
 
 packages:
 - containerd
 - runc
+
+properties:
+  garden.experimental_rootless_mode:
+    description: A boolean stating whether or not to run containerd as a non-root user
+    default: false
