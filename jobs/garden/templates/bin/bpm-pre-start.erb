@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -ex
 
 source /var/vcap/jobs/garden/bin/envs
 source /var/vcap/packages/greenskeeper/bin/system-preparation
@@ -28,3 +28,4 @@ fi
 <%- end } -%>
 
 mkdir -p /var/vcap/data/grootfs/store
+mkdir -p /var/vcap/data/containerd/sockets
