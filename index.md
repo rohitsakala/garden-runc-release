@@ -41,8 +41,8 @@ contributors.
 
 ## Onboarding
 
-- checklist
-- education
+- [checklist](onboarding.md#checklist)
+- [education](onboarding.md#education)
 
 ## Tribal Knowledge
 
