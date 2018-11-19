@@ -79,4 +79,19 @@ of key loading. Another method
 
 # Education
 
-TODO
+Please read through (or watch) the following resources.
+
+- [Building Containers from Scratch](https://skillsmatter.com/skillscasts/7101-building-containers-from-scratch-for-fun-and-profit) (video)
+- [Linux Namespaces](https://medium.com/@teddyking/linux-namespaces-850489d3ccf)
+- [Namespaces in Operation](https://lwn.net/Articles/531114/)
+- [Visualizing Docker Containers and Images](http://merrigrove.blogspot.co.uk/2015/10/visualizing-docker-containers-and-images.html)
+- [TTY primer](http://rachid.koucha.free.fr/tech_corner/pty_pdip.html)
+
+Be aware of the following resources (don't read them now unless you reaaaaally
+want to):
+
+- [cgroups](https://www.kernel.org/doc/Documentation/cgroup-v1/cgroups.txt)
+- [Kernel Docs](https://www.kernel.org/doc/Documentation/)
+
+For additional reading, have a look at
+[Giuseppe's containers study path](https://github.com/gcapizzi/containers-study-path).
