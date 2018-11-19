@@ -15,23 +15,25 @@ contributors.
 [tracker](https://www.pivotaltracker.com/n/projects/1158420) |
 [retro](https://retros.cfapps.io/retros/garden) |
 [slack](https://cloudfoundry.slack.com/messages/C033RE5D6/) |
-[email](mailto:cf-garden@pivotal.io)**
+[email](mailto:cf-garden@pivotal.io) |
+[opensource trello](https://trello.com/b/iSt5E1td/community-service)**
 
 ## Development Lifecycle
 
-- code structure
-- running tests
-- development tools & remote pairing
-- making changes
-- BOSH directors
+- code structure (Coming soon)
+- running tests (Coming soon)
+- development tools & remote pairing (Coming soon)
+- making changes (Coming soon)
+- BOSH directors (Coming soon)
+- Opensourcery (Coming soon)
 
 ## CI
 
-- CI structure
-- periodics
-- managing dependencies
-- OCI mode performance tests
-- shipping
+- CI structure (Coming soon)
+- periodics (Coming soon)
+- managing dependencies (Coming soon)
+- OCI mode performance tests (Coming soon)
+- shipping (Coming soon)
 
 ## Debugging
 
@@ -46,7 +48,10 @@ contributors.
 
 ## Tribal Knowledge
 
-- contributing to runc
-- contributing to containerd
-- debugging the Linux kernel
-- nsenter
+- [debugging the Linux kernel](tribal.md#kernel)
+- [nsenter](tribal.md#nsenter)
+
+# Opensourcery
+
+- contributing to runc (Coming soon)
+- contributing to containerd (Coming soon)
