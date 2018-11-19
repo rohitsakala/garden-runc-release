@@ -13,12 +13,40 @@ contributors.
 [meetings](https://bit.ly/garden-cf) |
 [CI](https://garden.ci.cf-app.com) |
 [tracker](https://www.pivotaltracker.com/n/projects/1158420) |
-[retro](https://retros.cfapps.io/retros/garden)
+[retro](https://retros.cfapps.io/retros/garden) |
+[slack](https://cloudfoundry.slack.com/messages/C033RE5D6/) |
+[email](mailto:cf-garden@pivotal.io)
 
-## Development
+## Development Lifecycle
+
+- code structure
+- running tests
+- development tools & remote pairing
+- making changes
+- BOSH directors
 
 ## CI
 
+- CI structure
+- periodics
+- managing dependencies
+- OCI mode performance tests
+- shipping
+
 ## Debugging
 
+- reporting issues/bugs
+- gathering logs
+- firedrills (Coming soon)
+
 ## Onboarding
+
+- checklist
+- education
+
+## Tribal Knowledge
+
+- contributing to runc
+- contributing to containerd
+- debugging the Linux kernel
+- nsenter
