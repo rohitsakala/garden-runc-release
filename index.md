@@ -39,7 +39,7 @@ contributors.
 
 - [reporting issues/bugs](debugging.md#reporting-issues)
 - [gathering logs](debugging.md#gathering-logs)
-- firedrills (Coming soon)
+- [firedrills](firedrills.md)
 
 ## Onboarding
 
