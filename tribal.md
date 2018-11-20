@@ -46,8 +46,7 @@ reboot
 
 ### About
 
-These are instructions for compiling the mainline kernel. For compiling Ubuntu
-kernels, we don't have instructions yet.
+These are instructions for compiling the mainline kernel. (For compiling the Ubuntu kernel the steps can be derived from [Bisect the Kernel](#bisect-the-kernel))
 
 ### Steps
 
@@ -185,7 +184,10 @@ To use your newly compiled kernel just perform the same steps as above (unpack, 
 
 Good luck
 
-# nsenter
+# Miscellaneous
+1. [Compiling nsenter](#nsenter)
+
+## nsenter
 
 ```bash
 sudo apt-get install build-essential libncurses5-dev libslang2-dev gettext zlib1g-dev \
