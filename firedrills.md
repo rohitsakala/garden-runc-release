@@ -5,19 +5,23 @@ occasionally act out. If you're reading this for the first time then please
 don't spoil the fun for yourself by reading on unless you have a particular
 role to play in this drill.
 
-## *This was a fun one*
+## *The one where new apps couldn't be pushed*
 
 ### Role: Environment setup
 
->! This firedrill will involve abusing the os.RemoveAll bug we found in golang
->! in order to DoS a diego-cell of all container create "slots". You must:
->!
->! 1. spin up a Cloud Foundry using a version of Garden vulnerable to this issue
->! 1. push 10 harmless apps (doras?) to simulate real apps
->! 1. craft a docker image to reproduce the vulnerability
->! 1. continue to push and delete apps until pushing eventually fails
->! 1. bask in your hackery
->! 1. read through the issue report below and get into character as the operator
+<details>
+
+This firedrill will involve abusing the os.RemoveAll bug we found in golang
+in order to DoS a diego-cell of all container create "slots". You must:
+
+1. spin up a Cloud Foundry using a version of Garden vulnerable to this issue
+1. push 10 harmless apps (doras?) to simulate real apps
+1. craft a docker image to reproduce the vulnerability
+1. continue to push and delete apps until pushing eventually fails
+1. bask in your hackery
+1. read through the issue report below and get into character as the operator
+
+</details>
 
 ### Role: garden engineers on-call
 
