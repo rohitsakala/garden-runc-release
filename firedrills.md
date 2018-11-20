@@ -25,7 +25,14 @@ in order to DoS a diego-cell of all container create "slots". You must:</p>
   <li>read through the issue report below and get into character as the operator</li>
 </ol>
 
-</details><br />
+<h4>Resources</h4>
+
+<ul>
+  <li><a href="https://www.cloudfoundry.org/blog/cve-2018-11084/">CVE report</a></li>
+  <li><a href="https://www.pivotaltracker.com/story/show/159246405">tracker story</a></li>
+</ul>
+
+</details>
 
 ### Role: garden engineers on-call
 
