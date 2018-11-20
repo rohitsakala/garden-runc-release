@@ -32,7 +32,7 @@ in order to DoS a diego-cell of all container create "slots". You must:</p>
   <li><a href="https://www.pivotaltracker.com/story/show/159246405">tracker story</a></li>
 </ul>
 
-</details>
+</details><br />
 
 ### Role: garden engineers on-call
 
