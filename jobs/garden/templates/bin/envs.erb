@@ -22,7 +22,10 @@ export MAXIMUS=$(maximus)
 # where to place the runc root dir in rootless mode.
 # Given that this is not set on stemcells we choose to set it explicitely
 # here.
-export XDG_RUNTIME_DIR=/var/run/user/$MAXIMUS
+export XDG_RUNTIME_DIR="/var/run/user/$MAXIMUS"
+<% if p("garden.experimental_containerd_mode") %>
+export XDG_RUNTIME_DIR="/var/vcap/data/containerd/runc/user/$MAXIMUS/garden"
+<% end %>
 export TMPDIR=$TMPDIR/user/$MAXIMUS/tmp
 export GARDEN_ROOTLESS_CONFIG_DIR="$GARDEN_DATA_DIR/config"
 export GARDEN_CONFIG_PATH="$GARDEN_ROOTLESS_CONFIG_DIR/config.ini"

@@ -1,6 +1,11 @@
-export RUN_DIR=/var/vcap/sys/run/containerd
-export LOG_DIR=/var/vcap/sys/log/containerd
-export DATA_DIR=/var/vcap/data/containerd
-export ROOT_DIR=/var/vcap/data/containerd/root
-export PID_FILEPATH="${RUN_DIR}/containerd.pid"
-export CONFIG_FILEPATH="/var/vcap/jobs/containerd/config/containerd.toml"
+export CONTAINERD_RUN_DIR=/var/vcap/sys/run/containerd
+export CONTAINERD_LOG_DIR=/var/vcap/sys/log/containerd
+export CONTAINERD_DATA_DIR=/var/vcap/data/containerd
+export CONTAINERD_TMP_DIR="${CONTAINERD_DATA_DIR}/tmp"
+export INIT_BIN_DIR="${CONTAINERD_DATA_DIR}/bin"
+export CONTAINERD_ROOT_DIR="${CONTAINERD_DATA_DIR}/root"
+export CONTAINERD_SOCKETS_DIR="${CONTAINERD_DATA_DIR}/sockets"
+export CONTAINERD_PID_FILEPATH="${CONTAINERD_RUN_DIR}/containerd.pid"
+export CONTAINERD_CONFIG_DIR=/var/vcap/jobs/containerd/config
+export CONTAINERD_ROOTLESS_CONFIG_DIR="${CONTAINERD_DATA_DIR}/config"
+export XDG_RUNTIME_DIR="/var/vcap/data/containerd/runc/user/4294967294"

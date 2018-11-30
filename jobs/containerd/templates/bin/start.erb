@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+set -eux
+
+# shellcheck disable=SC1091
+source /var/vcap/jobs/containerd/bin/envs
+
+log() {
+  local msg
+  local time
+
+  msg=$1
+  time=$(date +"%e/%m/%Y - %T")
+
+  echo "$time $msg" >> "${CONTAINERD_LOG_DIR}/containerd_ctl.log"
+}
+
+export PATH="${PATH}:/var/vcap/packages/containerd/bin"
+export PATH="${PATH}:/var/vcap/packages/runc/bin"
+export PATH="${PATH}:/var/vcap/packages/guardian/bin"
+export PATH="${PATH}:/var/vcap/packages/garden-idmapper/bin"
+export TMPDIR="${CONTAINERD_TMP_DIR}"
+
+export MAXIMUS=$(/var/vcap/packages/garden-idmapper/bin/maximus)
+
+exec 1>> "${CONTAINERD_LOG_DIR}/containerd.stdout.log"
+exec 2>> "${CONTAINERD_LOG_DIR}/containerd.stderr.log"
+
+log "running greenskeeper"
+greenskeeper_cmd="/var/vcap/packages/greenskeeper/bin/greenskeeper"
+<% if p("garden.experimental_rootless_mode") %>
+  greenskeeper_cmd="$greenskeeper_cmd --rootless --containerd"
+<% end %>
+$greenskeeper_cmd
+log "running greenskeeper: done"
+
+cp "$CONTAINERD_CONFIG_DIR/containerd.toml" "$CONTAINERD_ROOTLESS_CONFIG_DIR"
+chown "$MAXIMUS:$MAXIMUS" "$CONTAINERD_ROOTLESS_CONFIG_DIR/containerd.toml"
+
+chown root:4294967294 /var/vcap/data/garden
+
+echo $$ > "$CONTAINERD_PID_FILEPATH"
+
+exec 1>> "${CONTAINERD_LOG_DIR}/containerd.stdout.log"
+exec 2>> "${CONTAINERD_LOG_DIR}/containerd.stderr.log"
+
+
+# TODO: create the correct cgroups :p
+log "makin some cgroups"
+
+if ! grep -q " /sys/fs/cgroup "  /proc/self/mountinfo; then
+  mkdir -p /sys/fs/cgroup
+  mount cgroup /sys/fs/cgroup -t tmpfs -o uid=0,gid=0,mode=0755
+fi
+
+
+bosh_lite_thing=$(cat /proc/self/cgroup | cut -d : -f 3 | head -n 1)
+groups=( "net_cls" "net_prio" "cpuset" "cpu" "cpuacct" "blkio" "memory" "devices" "freezer" "perf_event" "hugetlb" "pids" )
+for group in "${groups[@]}"; do
+    mkdir -p /sys/fs/cgroup/$group$bosh_lite_thing/garden || true
+    chmod 0755 /sys/fs/cgroup/$group$bosh_lite_thing/garden
+    chown -R 4294967294:4294967294 /sys/fs/cgroup/$group$bosh_lite_thing/garden
+done
+
+
+log "cgroups made"
+
+log "moving init"
+rm -f "$INIT_BIN_DIR"/init
+cp /var/vcap/packages/guardian/bin/init "$INIT_BIN_DIR"/init
+
+log "starting containerd"
+exec execas --uid "$MAXIMUS" --gid "$MAXIMUS" containerd -c "$CONTAINERD_ROOTLESS_CONFIG_DIR/containerd.toml"
