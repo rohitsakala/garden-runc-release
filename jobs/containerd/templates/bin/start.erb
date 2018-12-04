@@ -26,17 +26,20 @@ exec 1>> "${CONTAINERD_LOG_DIR}/containerd.stdout.log"
 exec 2>> "${CONTAINERD_LOG_DIR}/containerd.stderr.log"
 
 log "running greenskeeper"
-greenskeeper_cmd="/var/vcap/packages/greenskeeper/bin/greenskeeper"
+greenskeeper_cmd="/var/vcap/packages/greenskeeper/bin/greenskeeper --containerd"
 <% if p("garden.experimental_rootless_mode") %>
-  greenskeeper_cmd="$greenskeeper_cmd --rootless --containerd"
+  greenskeeper_cmd="$greenskeeper_cmd --rootless"
 <% end %>
 $greenskeeper_cmd
 log "running greenskeeper: done"
 
-cp "$CONTAINERD_CONFIG_DIR/containerd.toml" "$CONTAINERD_ROOTLESS_CONFIG_DIR"
+<% if p("garden.experimental_rootless_mode") %>
+cp "$CONTAINERD_CONFIG_DIR/containerd.toml" "$CONTAINERD_ROOTLESS_CONFIG_DIR/containerd.toml"
 chown "$MAXIMUS:$MAXIMUS" "$CONTAINERD_ROOTLESS_CONFIG_DIR/containerd.toml"
 
 chown root:4294967294 /var/vcap/data/garden
+<% end %>
+
 
 echo $$ > "$CONTAINERD_PID_FILEPATH"
 
@@ -69,4 +72,8 @@ rm -f "$INIT_BIN_DIR"/init
 cp /var/vcap/packages/guardian/bin/init "$INIT_BIN_DIR"/init
 
 log "starting containerd"
+<% if p("garden.experimental_rootless_mode") %>
 exec execas --uid "$MAXIMUS" --gid "$MAXIMUS" containerd -c "$CONTAINERD_ROOTLESS_CONFIG_DIR/containerd.toml"
+<% else %>
+exec containerd -c "$CONTAINERD_CONFIG_DIR/containerd.toml"
+<% end %>

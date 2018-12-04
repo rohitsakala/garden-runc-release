@@ -39,9 +39,11 @@ uid = 4294967294
 gid = 4294967294
 <% end %>
 
-<% if p("garden.experimental_rootless_mode") %>
 [plugins]
   [plugins.linux]
+<% if p("garden.experimental_rootless_mode") %>
     runtime_root = "/var/vcap/data/containerd/runc/user/4294967294"
-    shim_debug = true
+<% else -%>
+    runtime_root = "/var/vcap/data/containerd/runc/root"
 <% end %>
+    shim_debug = true

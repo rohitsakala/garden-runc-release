@@ -8,4 +8,7 @@ export CONTAINERD_SOCKETS_DIR="${CONTAINERD_DATA_DIR}/sockets"
 export CONTAINERD_PID_FILEPATH="${CONTAINERD_RUN_DIR}/containerd.pid"
 export CONTAINERD_CONFIG_DIR=/var/vcap/jobs/containerd/config
 export CONTAINERD_ROOTLESS_CONFIG_DIR="${CONTAINERD_DATA_DIR}/config"
+
+<% if p("garden.experimental_rootless_mode") %>
 export XDG_RUNTIME_DIR="/var/vcap/data/containerd/runc/user/4294967294"
+<% end %>
