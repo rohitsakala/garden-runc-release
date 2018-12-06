@@ -51,7 +51,7 @@ func main() {
 	} else {
 		directories = []greenskeeper.Directory{
 			greenskeeper.NewDirectoryBuilder(mustGetenv("RUN_DIR")).Mode(0770).Build(),
-			greenskeeper.NewDirectoryBuilder(mustGetenv("GARDEN_DATA_DIR")).Mode(0770).UID(mustResolveUID("vcap")).GID(mustGetMaximus()).Build(),
+			greenskeeper.NewDirectoryBuilder(mustGetenv("GARDEN_DATA_DIR")).Mode(0770).UID(mustResolveUID("vcap")).GID(owner).Build(),
 			greenskeeper.NewDirectoryBuilder(mustGetenv("LOG_DIR")).Mode(0770).UID(owner).GID(owner).Build(),
 			greenskeeper.NewDirectoryBuilder(mustGetenv("TMPDIR")).Mode(0755).UID(owner).GID(owner).Build(),
 			greenskeeper.NewDirectoryBuilder(mustGetenv("DEPOT_PATH")).Mode(0755).UID(owner).GID(owner).Build(),

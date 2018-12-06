@@ -23,7 +23,7 @@ export MAXIMUS=$(maximus)
 # Given that this is not set on stemcells we choose to set it explicitely
 # here.
 export XDG_RUNTIME_DIR="/var/run/user/$MAXIMUS"
-<% if p("garden.experimental_containerd_mode") %>
+<% if p("garden.containerd_mode") %>
 export XDG_RUNTIME_DIR="/var/vcap/data/containerd/runc/user/$MAXIMUS/garden"
 <% end %>
 export TMPDIR=$TMPDIR/user/$MAXIMUS/tmp

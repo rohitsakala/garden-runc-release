@@ -14,7 +14,7 @@ processes:
       - path: /var/vcap/data/grootfs/store
         writable: true
         mount_only: true
-<%- if p("garden.experimental_containerd_mode") -%>
+<%- if p("garden.containerd_mode") -%>
       - path: /var/vcap/data/containerd/runc/user
         writable: true
         mount_only: true

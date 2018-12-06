@@ -35,12 +35,6 @@ greenskeeper_cmd="/var/vcap/packages/greenskeeper/bin/greenskeeper"
 $greenskeeper_cmd
 log "running greenskeeper: done"
 
-<% if p("garden.image_plugin", "") == "" %>
-log "configuring xfs"
-${BASE_PATH}/overlay-xfs-setup
-log "configuring xfs: done"
-<% end %>
-
 # cannot over-write an executable mid-execution
 rm -f "$RUNTIME_BIN_DIR"/init
 cp /var/vcap/packages/guardian/bin/init "$RUNTIME_BIN_DIR"/init
