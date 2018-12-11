@@ -47,6 +47,7 @@ func main() {
 		if rootlessMode {
 			directories = append(directories, greenskeeper.NewDirectoryBuilder(mustGetenv("XDG_RUNTIME_DIR")).Mode(0700).UID(owner).GID(owner).Build())
 			directories = append(directories, greenskeeper.NewDirectoryBuilder(mustGetenv("CONTAINERD_ROOTLESS_CONFIG_DIR")).Mode(0700).UID(owner).GID(owner).Build())
+			directories = append(directories, greenskeeper.NewDirectoryBuilder(mustGetenv("GARDEN_DATA_DIR")).Mode(0770).UID(mustResolveUID("vcap")).GID(owner).Build())
 		}
 	} else {
 		directories = []greenskeeper.Directory{
