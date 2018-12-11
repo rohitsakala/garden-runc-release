@@ -44,26 +44,6 @@ exec 1>> "${CONTAINERD_LOG_DIR}/containerd.stdout.log"
 exec 2>> "${CONTAINERD_LOG_DIR}/containerd.stderr.log"
 
 
-# TODO: create the correct cgroups :p
-log "makin some cgroups"
-
-if ! grep -q " /sys/fs/cgroup "  /proc/self/mountinfo; then
-  mkdir -p /sys/fs/cgroup
-  mount cgroup /sys/fs/cgroup -t tmpfs -o uid=0,gid=0,mode=0755
-fi
-
-
-bosh_lite_thing=$(cat /proc/self/cgroup | cut -d : -f 3 | head -n 1)
-groups=( "net_cls" "net_prio" "cpuset" "cpu" "cpuacct" "blkio" "memory" "devices" "freezer" "perf_event" "hugetlb" "pids" )
-for group in "${groups[@]}"; do
-    mkdir -p /sys/fs/cgroup/$group$bosh_lite_thing/garden || true
-    chmod 0755 /sys/fs/cgroup/$group$bosh_lite_thing/garden
-    chown -R 4294967294:4294967294 /sys/fs/cgroup/$group$bosh_lite_thing/garden
-done
-
-
-log "cgroups made"
-
 log "moving init"
 rm -f "$INIT_BIN_DIR"/init
 cp /var/vcap/packages/guardian/bin/init "$INIT_BIN_DIR"/init
