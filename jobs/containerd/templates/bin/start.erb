@@ -35,6 +35,8 @@ log "running greenskeeper: done"
 
 <% if p("garden.experimental_rootless_mode") %>
 cp "$CONTAINERD_CONFIG_DIR/containerd.toml" "$CONTAINERD_ROOTLESS_CONFIG_DIR/containerd.toml"
+chown "$MAXIMUS:$MAXIMUS" "$CONTAINERD_ROOTLESS_CONFIG_DIR/containerd.toml"
+chown vcap:4294967294 /var/vcap/data/garden
 <% end %>
 
 
