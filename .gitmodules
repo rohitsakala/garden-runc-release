@@ -1,7 +1,7 @@
 [submodule "src/code.cloudfoundry.org/guardian"]
 	path = src/code.cloudfoundry.org/guardian
 	url = https://github.com/cloudfoundry/guardian
-	branch = master
+	branch = wip-rootlessd-roommates
 [submodule "src/github.com/onsi/gomega"]
 	path = src/github.com/onsi/gomega
 	url = https://github.com/onsi/gomega
@@ -43,9 +43,9 @@
 	url = https://github.com/cloudfoundry/grootfs
 	branch = master
 [submodule "src/github.com/containerd/containerd"]
-	path = src/github.com/containerd/containerd
-	url = https://github.com/containerd/containerd
-	branch = master
+	path = src/github.com/masters-of-cats/containerd
+	url = https://github.com/masters-of-cats/containerd
+	branch = wip-rootlessd-again
 [submodule "src/code.cloudfoundry.org/archiver"]
 	path = src/code.cloudfoundry.org/archiver
 	url = https://github.com/cloudfoundry/archiver

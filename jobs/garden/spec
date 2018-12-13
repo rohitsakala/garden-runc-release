@@ -4,7 +4,7 @@ name: garden
 templates:
   bin/bpm-pre-start.erb:                    bin/bpm-pre-start
   bin/garden_start.erb:                     bin/garden_start
-  bin/garden_stop:                          bin/garden_stop
+  bin/garden_stop.erb:                      bin/garden_stop
   bin/envs.erb:                             bin/envs
   config/garden-default.erb:                config/garden-default
   config/bpm.yml.erb:                       config/bpm.yml
@@ -17,8 +17,12 @@ templates:
   certs/remote-layer.crt.erb:               certs/remote-layer.crt
   certs/remote-layer.cert.erb:              certs/remote-layer.cert
   certs/remote-layer.key.erb:               certs/remote-layer.key
+  config/containerd.toml:                   config/containerd.toml
+  bin/containerd_ctl:                       bin/containerd_ctl
+  bin/containerd_envs:                      bin/containerd_envs
 
 packages:
+  - containerd
   - guardian
   - iptables
   - runc

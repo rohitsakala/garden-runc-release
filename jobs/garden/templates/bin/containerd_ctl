@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -eux
+
+# shellcheck disable=SC1091
+source /var/vcap/jobs/garden/bin/containerd_envs
+source /var/vcap/jobs/garden/bin/envs
+
+export PATH="${PATH}:/var/vcap/packages/containerd/bin"
+export PATH="${PATH}:/var/vcap/packages/runc/bin"
+
+containerd_log() {
+  local msg
+  local time
+
+  msg=$1
+  time=$(date +"%e/%m/%Y - %T")
+
+  echo "$time $msg" >> "${LOG_DIR}/containerd_ctl.log"
+}
+
+start_containerd() {
+  echo $$ > "$CONTAINERD_PID_FILEPATH"
+
+  containerd_log "starting containerd"
+
+  exec 1>> "${LOG_DIR}/containerd.stdout.log"
+  exec 2>> "${LOG_DIR}/containerd.stderr.log"
+
+  maximus=$(/var/vcap/packages/garden-idmapper/bin/maximus)
+
+  cp "$GARDEN_CONFIG_DIR/containerd.toml" "$GARDEN_ROOTLESS_CONFIG_DIR"
+  chown "$maximus:$maximus" "$GARDEN_ROOTLESS_CONFIG_DIR/containerd.toml"
+
+  exec_command="exec execas --uid $maximus --gid $maximus"
+  $exec_command containerd -c "$GARDEN_ROOTLESS_CONFIG_DIR/containerd.toml" &
+  # when this fails the failure is also backgrounded, therefore the garden_start script will continue
+  # with gdn failing
+}
+
+stop_containerd() {
+  log "stopping containerd"
+  kill "$( cat "$CONTAINERD_PID_FILEPATH" )"
+  rm -f "$CONTAINERD_PID_FILEPATH"
+}

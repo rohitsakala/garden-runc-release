@@ -24,8 +24,16 @@ disabled_plugins = [
 ]
 
 [grpc]
-address = "/var/vcap/sys/run/containerd/containerd.sock"
+address = "/var/vcap/data/containerd/sockets/containerd.sock"
+uid = 4294967294
+gid = 4294967294
 
 [debug]
-address = "/var/vcap/sys/run/containerd/debug.sock"
-level = "info"
+address = "/var/vcap/data/containerd/sockets/debug.sock"
+uid = 4294967294
+gid = 4294967294
+level = "debug"
+
+[plugins]
+  [plugins.linux]
+    runtime_root = "/var/run/user/4294967294/runc"

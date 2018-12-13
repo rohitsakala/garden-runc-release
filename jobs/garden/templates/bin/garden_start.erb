@@ -3,6 +3,7 @@
 set -e
 
 source /var/vcap/jobs/garden/bin/envs
+source /var/vcap/jobs/garden/bin/containerd_ctl
 source /var/vcap/packages/greenskeeper/bin/system-preparation
 
 <% if !p("bpm.enabled") %>
@@ -43,6 +44,12 @@ cp /var/vcap/packages/guardian/bin/init "$RUNTIME_BIN_DIR"/init
 log "configuring xfs"
 ${BASE_PATH}/overlay-xfs-setup
 log "configuring xfs: done"
+<% end %>
+
+<% if p("garden.experimental_containerd_mode") || p("garden.containerd_mode") -%>
+log "doing some nerdy stuff"
+start_containerd
+log "containerd started"
 <% end %>
 
 exec 1> >( tee -a $LOG_DIR/garden.stdout.log | logger -p user.info -t vcap.garden ) \

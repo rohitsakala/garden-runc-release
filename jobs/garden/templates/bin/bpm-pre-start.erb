@@ -13,6 +13,7 @@ log "running thresholder"
 log "done"
 
 mkdir -p /var/vcap/data/grootfs/store
+mkdir -p /var/vcap/data/containerd/sockets
 
 <%- if_p('garden.additional_bpm_volumes') { |vols| if vols.include?('/var/vcap/data/rep/shared/garden') -%>
 mkdir -p /var/vcap/data/rep/shared/garden

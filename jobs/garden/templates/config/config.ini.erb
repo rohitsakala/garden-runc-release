@@ -163,8 +163,11 @@
 
 <% if p("garden.experimental_containerd_mode") || p("garden.containerd_mode") -%>
 ; containerd
-  containerd-socket = /var/vcap/sys/run/containerd/containerd.sock
+  containerd-socket = /var/vcap/data/containerd/sockets/containerd.sock
   <% if p("garden.experimental_use_containerd_mode_for_processes") -%>
   use-containerd-for-processes = true
+  <% end -%>
+  <% if p("garden.experimental_rootless_mode") -%>
+  containerd-runtime-root = /var/run/user/4294967294/runc
   <% end -%>
 <% end -%>

@@ -1,0 +1,7 @@
+export CONTAINERD_RUN_DIR=/var/vcap/data/containerd/run
+export CONTAINERD_LOG_DIR=/var/vcap/sys/log/containerd
+export CONTAINERD_DATA_DIR=/var/vcap/data/containerd
+export CONTAINERD_SOCKETS_DIR="$CONTAINERD_DATA_DIR/sockets"
+export CONTAINERD_ROOT_DIR=/var/vcap/data/containerd/root
+export CONTAINERD_PID_FILEPATH="${CONTAINERD_RUN_DIR}/containerd.pid"
+export CONTAINERD_CONFIG_FILEPATH="/var/vcap/jobs/garden/config/containerd.toml"

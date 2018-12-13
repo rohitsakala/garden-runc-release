@@ -33,6 +33,11 @@ func main() {
 		greenskeeper.NewDirectoryBuilder(mustGetenv("TMPDIR")).Mode(0755).UID(owner).GID(owner).Build(),
 		greenskeeper.NewDirectoryBuilder(mustGetenv("DEPOT_PATH")).Mode(0755).UID(owner).GID(owner).Build(),
 		greenskeeper.NewDirectoryBuilder(mustGetenv("RUNTIME_BIN_DIR")).Mode(0750).GID(mustGetMaximus()).Build(),
+		greenskeeper.NewDirectoryBuilder(mustGetenv("CONTAINERD_RUN_DIR")).Mode(0770).Build(),
+		greenskeeper.NewDirectoryBuilder(mustGetenv("CONTAINERD_DATA_DIR")).Mode(0770).UID(mustResolveUID("vcap")).GID(mustGetMaximus()).Build(),
+		greenskeeper.NewDirectoryBuilder(mustGetenv("CONTAINERD_LOG_DIR")).Mode(0770).UID(owner).GID(owner).Build(),
+		greenskeeper.NewDirectoryBuilder(mustGetenv("CONTAINERD_ROOT_DIR")).Mode(0770).UID(owner).GID(owner).Build(),
+		greenskeeper.NewDirectoryBuilder(mustGetenv("CONTAINERD_SOCKETS_DIR")).Mode(0770).UID(owner).GID(owner).Build(),
 	}
 
 	if rootlessMode {
