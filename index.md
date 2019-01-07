@@ -25,7 +25,6 @@ contributors.
 - development tools & remote pairing (Coming soon)
 - making changes (Coming soon)
 - BOSH directors (Coming soon)
-- Opensourcery (Coming soon)
 
 ## CI
 
@@ -53,5 +52,5 @@ contributors.
 
 # Opensourcery
 
-- contributing to runc (Coming soon)
+- [contributing to runc](opensourcery.md#runc)
 - contributing to containerd (Coming soon)
