@@ -175,3 +175,154 @@
   use-containerd-for-processes = true
   <% end -%>
 <% end -%>
+
+
+[cleanup]
+; apparmor
+<% if apparmor_profile_provided -%>
+  apparmor = <%= p("garden.apparmor_profile") %>
+<% end -%>
+
+; binaries
+  iptables-bin = /var/vcap/packages/iptables/sbin/iptables
+  iptables-restore-bin = /var/vcap/packages/iptables/sbin/iptables-restore
+  init-bin = <%= "#{runtime_bin_dir}/init" %>
+  dadoo-bin = /var/vcap/packages/guardian/bin/dadoo
+  nstar-bin = /var/vcap/packages/guardian/bin/nstar
+  tar-bin = /var/vcap/packages/tar/tar
+
+; containers
+  default-grace-time = <%= p("garden.default_container_grace_time") %>
+<% if p("garden.destroy_containers_on_start") -%>
+  destroy-containers-on-startup = true
+<% end -%>
+<% if_p("garden.max_containers") do |max_containers| -%>
+  max-containers = <%= max_containers %>
+<% end -%>
+<% if p("garden.cleanup_process_dirs_on_wait") -%>
+  cleanup-process-dirs-on-wait = true
+<% end -%>
+
+; image and rootfs
+  default-rootfs = <%= p("garden.default_container_rootfs") %>
+<% if p("garden.no_image_plugin") -%>
+  no-image-plugin = true
+<% else -%>
+  <% if use_provided_image_plugin -%>
+    image-plugin = <%= image_plugin %>
+    <% p("garden.image_plugin_extra_args").each do |arg| -%>
+    image-plugin-extra-arg = <%= arg %>
+    <% end -%>
+  <% end -%>
+  <% if use_provided_privileged_image_plugin -%>
+    privileged-image-plugin = <%= privileged_image_plugin %>
+    <% p("garden.privileged_image_plugin_extra_args").each do |arg| -%>
+    privileged-image-plugin-extra-arg = <%= arg %>
+    <% end -%>
+  <% end -%>
+  <% if use_default_image_plugin -%>
+    image-plugin = /var/vcap/packages/grootfs/bin/grootfs
+    image-plugin-extra-arg = "--config"
+    image-plugin-extra-arg = <%= groot_config_dir %>/grootfs_config.yml
+  <% end -%>
+  <% if use_default_privileged_image_plugin -%>
+    privileged-image-plugin = /var/vcap/packages/grootfs/bin/grootfs
+    privileged-image-plugin-extra-arg = "--config"
+    privileged-image-plugin-extra-arg = <%= groot_config_dir %>/privileged_grootfs_config.yml
+  <% end -%>
+<% end -%>
+<% if_p("garden.docker_registry_endpoint") do |endpoint| -%>
+  docker-registry = <%= endpoint %>
+<% end -%>
+
+; metrics
+<% if_p("garden.dropsonde.origin") do |origin| -%>
+  dropsonde-origin = <%= origin %>
+<% end -%>
+<% if_p("garden.dropsonde.destination") do |destination| -%>
+  dropsonde-destination = <%= destination %>
+<% end -%>
+
+; network
+  mtu = <%= p("garden.network_mtu") %>
+  network-pool = <%= p("garden.network_pool") %>
+<% p("garden.deny_networks").each do |network| -%>
+  deny-network = <%= network %>
+<% end -%>
+<% if p("garden.allow_host_access") -%>
+  allow-host-access = true
+<% end -%>
+<% if_p("garden.network_plugin") do |plugin| -%>
+  network-plugin = <%= plugin %>
+  <% p("garden.network_plugin_extra_args").each do |arg| -%>
+  network-plugin-extra-arg = <%= arg %>
+  <% end -%>
+<% end -%>
+<% p("garden.dns_servers").each do |server| -%>
+  dns-server = <%= server %>
+<% end -%>
+<% p("garden.additional_dns_servers").each do |server| -%>
+  additional-dns-server = <%= server %>
+<% end -%>
+<% p("garden.additional_host_entries").each do |host_entry| -%>
+  additional-host-entry = "<%= host_entry %>"
+<% end -%>
+
+; properties
+  properties-path = /var/vcap/data/garden/props.json
+  port-pool-properties-path = /var/vcap/data/garden/port-pool-props.json
+<% if_p("garden.port_pool.start") do |start| -%>
+  port-pool-start = <%= start %>
+<% end -%>
+<% if_p("garden.port_pool.size") do |size| -%>
+  port-pool-size = <%= size %>
+<% end -%>
+
+; resource limiting
+  default-container-blockio-weight = <%= p("garden.default_container_blockio_weight") %>
+<% if_p("garden.cpu_quota_per_share_in_us") do |quota_per_share| -%>
+  cpu-quota-per-share = <%= quota_per_share %>
+<% end -%>
+<% if_p("garden.experimental_cpu_entitlement_per_share_in_percent") do |entitlement_per_share| -%>
+  cpu-entitlement-per-share = <%= entitlement_per_share %>
+<% end -%>
+<% if_p("garden.experimental_tcp_mem_limit_in_bytes") do |tcp_memory| -%>
+  tcp-memory-limit = <%= tcp_memory %>
+<% end -%>
+<% if p("garden.disable_swap_limit") -%>
+  disable-swap-limit = true
+<% end -%>
+
+; server
+<% if p("garden.listen_network") == "tcp" -%>
+  bind-ip = <%= bind_ip %>
+  bind-port = <%= bind_port %>
+<% else -%>
+  bind-socket = <%= p("garden.listen_address") %>
+<% end -%>
+<% if_p("garden.debug_listen_address") do |debug_listen_address|
+  debug_ip, debug_port = debug_listen_address.split(":") -%>
+  debug-bind-ip = <%= debug_ip %>
+  debug-bind-port = <%= debug_port %>
+<% end -%>
+  log-level = <%= p("garden.log_level") %>
+<% if_p("logging.format.timestamp") do |format| -%>
+  <% if format != "unix-epoch" and format != "rfc3339" -%>
+    <% raise "logging.format.timestamp should be one of: 'unix-epoch' or 'rfc3339'" -%>
+  <% end -%>
+  time-format = <%= format %>
+<% end -%>
+  skip-setup = true
+  depot = /var/vcap/data/garden/depot
+  runtime-plugin=<%= p("garden.runtime_plugin") %>
+<% if rootless -%>
+  disable-privileged-containers = true
+<% end -%>
+
+<% if p("garden.containerd_mode") -%>
+; containerd
+  containerd-socket = /var/vcap/sys/run/containerd/containerd.sock
+  <% if p("garden.experimental_use_containerd_mode_for_processes") -%>
+  use-containerd-for-processes = true
+  <% end -%>
+<% end -%>

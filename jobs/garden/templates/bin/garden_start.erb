@@ -78,6 +78,19 @@ log "running setup"
 $setup_cmd
 log "running setup: done"
 
+<% if p("garden.destroy_containers_on_start") %>
+  cleanup_cmd="/var/vcap/packages/guardian/bin/gdn \
+                --config "$GARDEN_CONFIG_PATH" \
+                cleanup \
+                --uid-map-start="$id_map_start" \
+                --uid-map-length=$((MAXIMUS-id_map_start)) \
+                --gid-map-start="$id_map_start" \
+                --gid-map-length=$((MAXIMUS-id_map_start))"
+  log "running cleanup on start"
+  $cleanup_cmd
+  log "running cleanup on start: done"
+<% end %>
+
 <% if !p("bpm.enabled") %>
   echo $$ > $PIDFILE
 <% end %>
