@@ -1,0 +1,6 @@
+- type: replace
+  path: /releases/name=bpm
+  value:
+   name: bpm
+   version: create
+   url: file://../bpm-release

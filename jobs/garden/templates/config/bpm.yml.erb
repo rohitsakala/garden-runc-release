@@ -24,3 +24,7 @@ processes:
         mount_only: true
         allow_executions: true
 <%- } } -%>
+    shared_volumes:
+<%- if_p('garden.shared_bpm_volumes') { |vols| vols.each { |vol| -%>
+      - <%= vol %>
+<%- } } -%>
