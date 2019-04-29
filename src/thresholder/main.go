@@ -25,6 +25,7 @@ func main() {
 	if threshold >= 0 {
 		config.Create.WithClean = true
 		config.Clean.ThresholdBytes = threshold
+		config.Init.StoreSizeBytes = threshold
 	}
 
 	writeConfig(config, configPath)
@@ -78,6 +79,7 @@ func parseFileParameter(parameterValue, failureMessage string) *config.Config {
 
 func writeConfig(config *config.Config, configPath string) {
 	configBytes, err := yaml.Marshal(config)
+
 	if err != nil {
 		failWithMessage(err.Error())
 	}

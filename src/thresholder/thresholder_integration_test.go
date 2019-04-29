@@ -64,6 +64,12 @@ var _ = Describe("Thresholder", func() {
 			Expect(resultingConfig().Clean.ThresholdBytes).To(Equal(diskSize - megabytesToBytes(reservedSpaceInt)))
 		})
 
+		It("sets the init.store_size_bytes value to total disk space minus reserved space", func() {
+			reservedSpaceInt, err := strconv.ParseInt(reservedSpace, 10, 64)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(resultingConfig().Init.StoreSizeBytes).To(Equal(diskSize - megabytesToBytes(reservedSpaceInt)))
+		})
+
 		It("sets the create.with_clean value to true", func() {
 			Expect(resultingConfig().Create.WithClean).To(BeTrue())
 		})
